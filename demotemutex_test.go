@@ -23,6 +23,11 @@ func TestDemotion(t *testing.T) {
 	}()
 
 	// Spawn a thread that will read the value and send it down the channel.
+	//
+	// Ideally there's a way to guarantee that this thread runs after the other
+	// goroutine, to guarantee that the writelock is trying to acquire the
+	// mutex before the call to 'dm.RLock' is made. I could not find a way to
+	// get that guarantee.
 	go func() {
 		dm.RLock()
 		c <- value
